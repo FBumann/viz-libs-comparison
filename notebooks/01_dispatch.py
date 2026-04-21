@@ -15,18 +15,24 @@ __generated_with = "0.23.2"
 app = marimo.App(width="medium")
 
 
-@app.cell
-def _():
+with app.setup:
     import warnings
 
     warnings.filterwarnings("ignore", message=".*narwhals.*")
 
+    import io
+    import time
+
+    import altair as alt
     import marimo as mo
-    return (mo,)
+    import pandas as pd
+    import plotly.graph_objects as go
+    from bokeh.models import ColumnDataSource, CrosshairTool, HoverTool, LinearAxis, Range1d
+    from bokeh.plotting import figure
 
 
 @app.cell
-def _(mo):
+def _():
     mo.md(
         """
         &larr; [Home](../../index.html)
@@ -69,6 +75,7 @@ def _(mo):
         | Dimension | Plotly | Altair | Bokeh |
         |---|---|---|---|
         | Signed stacking (charge below zero) | ⚠️ `px.area` mis-handles mixed signs; drop to `go.Scatter` + extra `fill='tozeroy'` trace | ✅ `stack('zero')` handles both sides | ⚠️ separate `varea` call for charge (two renderers) |
+        | Step-shaped area (values held across the timestep) | ✅ `line_shape='hv'` on each trace; handles **irregular** timesteps by construction | ✅ `mark_area(interpolate='step-after')`; handles **irregular** timesteps by construction | ⚠️ no built-in step-area — use `vbar_stack` + the `step` glyph. Irregular timesteps need a per-row `width` column (`time.diff()` → ms) and a per-row centre (`time + width/2`) instead of a hardcoded hourly width |
         | Secondary y-axis | ✅ `yaxis='y2'` + `overlaying='y'` | ✅ `resolve_scale(y='independent')` | ✅ `extra_y_ranges` + `LinearAxis(..., 'right')` |
         | Unified cross-series hover | ✅ `hovermode='x unified'` | ⚠️ needs wide-form pivot + `selection_point(nearest=True)` + invisible selectors + a rule layer with consolidated tooltip | ⚠️ works with `CrosshairTool` + `HoverTool(renderers=[anchor], mode='vline')` — a few moving parts |
         | Legend click to toggle | ✅ native | ⚠️ `selection_point` + `transform_filter` on every layer | ✅ `click_policy='mute'` |
@@ -84,11 +91,7 @@ def _(mo):
 
 
 @app.cell
-async def _(mo):
-    import io
-
-    import pandas as pd
-
+async def _():
     _path = str(mo.notebook_location() / "public" / "dispatch.parquet")
     if _path.startswith(("http://", "https://")):
         from pyodide.http import pyfetch
@@ -98,11 +101,11 @@ async def _(mo):
     else:
         df_full = pd.read_parquet(_path)
     df_full
-    return (df_full, pd)
+    return (df_full,)
 
 
 @app.cell
-def _(df_full, pd):
+def _(df_full):
     week = df_full[
         (df_full["scenario"] == "baseline")
         & (df_full["period"] == 2030)
@@ -122,7 +125,7 @@ def _(df_full, pd):
 
 
 @app.cell
-def _(mo):
+def _():
     mo.md(
         """
         ## Dispatch over the week
@@ -136,15 +139,14 @@ def _(mo):
 
 
 @app.cell
-def _(mo):
+def _():
     mo.md("### Plotly")
     return
 
 
 @app.cell
 def _(week, week_ts):
-    import plotly.graph_objects as go
-
+    _t0 = time.perf_counter()
     _colors = {
         "solar": "#F4B400",
         "wind": "#1A73E8",
@@ -164,6 +166,7 @@ def _(week, week_ts):
                 name=_flow,
                 stackgroup="supply",
                 mode="none",
+                line_shape="hv",
                 fillcolor=_colors[_flow],
             )
         )
@@ -176,6 +179,7 @@ def _(week, week_ts):
             name="batt_charge",
             fill="tozeroy",
             mode="none",
+            line_shape="hv",
             fillcolor=_colors["batt_charge"],
         )
     )
@@ -185,7 +189,7 @@ def _(week, week_ts):
             y=week_ts["demand"],
             mode="lines",
             name="demand",
-            line={"color": "black", "width": 2, "dash": "dot"},
+            line={"color": "black", "width": 2, "dash": "dot", "shape": "hv"},
         )
     )
     fig_dispatch_plotly.add_trace(
@@ -194,7 +198,7 @@ def _(week, week_ts):
             y=week_ts["storage_soc"],
             mode="lines",
             name="SoC",
-            line={"color": "purple", "width": 2},
+            line={"color": "purple", "width": 2, "shape": "hv"},
             yaxis="y2",
         )
     )
@@ -203,20 +207,22 @@ def _(week, week_ts):
         yaxis2={"title": "SoC (MWh)", "overlaying": "y", "side": "right"},
         hovermode="x unified",
     )
-    fig_dispatch_plotly
+    _elapsed_plotly = (time.perf_counter() - _t0) * 1000
+    mo.vstack(
+        [mo.md(f"_Python build: **{_elapsed_plotly:.1f} ms**_"), fig_dispatch_plotly]
+    )
     return
 
 
 @app.cell
-def _(mo):
+def _():
     mo.md("### Altair")
     return
 
 
 @app.cell
 def _(week, week_stacked, week_ts):
-    import altair as alt
-
+    _t0 = time.perf_counter()
     _domain = ["solar", "wind", "gas", "batt_discharge", "batt_charge", "demand", "SoC"]
     _range = ["#F4B400", "#1A73E8", "#616161", "#34A853", "#EA4335", "#000000", "purple"]
     _color = alt.Color(
@@ -232,7 +238,7 @@ def _(week, week_stacked, week_ts):
 
     _area = (
         alt.Chart(week_stacked)
-        .mark_area()
+        .mark_area(interpolate="step-after")
         .encode(
             x="time:T",
             y=alt.Y("power:Q").stack("zero").title("Power (MW)"),
@@ -243,13 +249,13 @@ def _(week, week_stacked, week_ts):
     )
     _demand = (
         alt.Chart(week_ts.assign(flow="demand"))
-        .mark_line(strokeDash=[4, 2], strokeWidth=2)
+        .mark_line(strokeDash=[4, 2], strokeWidth=2, interpolate="step-after")
         .encode(x="time:T", y="demand:Q", color=_color)
         .transform_filter(_legend_sel)
     )
     _soc = (
         alt.Chart(week_ts.assign(flow="SoC"))
-        .mark_line(strokeWidth=2)
+        .mark_line(strokeWidth=2, interpolate="step-after")
         .encode(x="time:T", y=alt.Y("storage_soc:Q").title("SoC (MWh)"), color=_color)
         .transform_filter(_legend_sel)
     )
@@ -295,24 +301,29 @@ def _(week, week_stacked, week_ts):
         .properties(width=720, height=380)
         .interactive()
     )
-    chart_dispatch_altair
+    _elapsed_altair = (time.perf_counter() - _t0) * 1000
+    mo.vstack(
+        [mo.md(f"_Python build: **{_elapsed_altair:.1f} ms**_"), chart_dispatch_altair]
+    )
     return
 
 
 @app.cell
-def _(mo):
+def _():
     mo.md("### Bokeh")
     return
 
 
 @app.cell
 def _(week_stacked, week_ts):
-    from bokeh.models import ColumnDataSource, CrosshairTool, HoverTool, LinearAxis, Range1d
-    from bokeh.plotting import figure
-
+    _t0 = time.perf_counter()
     _wide = week_stacked.pivot_table(index="time", columns="flow", values="power").reset_index()
     _wide["demand"] = week_ts["demand"].to_numpy()
     _wide["soc"] = week_ts["storage_soc"].to_numpy()
+    # Per-row bar width from the actual time step — works for irregular spacing too.
+    _wide["delta_ms"] = _wide["time"].diff().shift(-1).dt.total_seconds() * 1000
+    _wide["delta_ms"] = _wide["delta_ms"].fillna(_wide["delta_ms"].median())
+    _wide["time_center"] = _wide["time"] + pd.to_timedelta(_wide["delta_ms"] / 2, unit="ms")
     _source = ColumnDataSource(_wide)
 
     p_dispatch_bokeh = figure(
@@ -325,28 +336,31 @@ def _(week_stacked, week_ts):
     p_dispatch_bokeh.add_tools(CrosshairTool(dimensions="height"))
     _positive_flows = ["solar", "wind", "gas", "batt_discharge"]
     _positive_colors = ["#F4B400", "#1A73E8", "#616161", "#34A853"]
-    p_dispatch_bokeh.varea_stack(
+    p_dispatch_bokeh.vbar_stack(
         stackers=_positive_flows,
-        x="time",
+        x="time_center",
+        width="delta_ms",
         source=_source,
         color=_positive_colors,
         legend_label=_positive_flows,
     )
-    p_dispatch_bokeh.varea(
-        x="time",
-        y1=0,
-        y2="batt_charge",
+    p_dispatch_bokeh.vbar(
+        x="time_center",
+        top=0,
+        bottom="batt_charge",
+        width="delta_ms",
         source=_source,
         color="#EA4335",
         legend_label="batt_charge",
     )
-    _demand_renderer = p_dispatch_bokeh.line(
+    _demand_renderer = p_dispatch_bokeh.step(
         x="time",
         y="demand",
         source=_source,
         color="black",
         line_width=2,
         line_dash="dotted",
+        mode="after",
         legend_label="demand",
     )
     p_dispatch_bokeh.add_tools(
@@ -375,19 +389,23 @@ def _(week_stacked, week_ts):
     p_dispatch_bokeh.add_layout(
         LinearAxis(y_range_name="soc_axis", axis_label="SoC (MWh)"), "right"
     )
-    p_dispatch_bokeh.line(
+    p_dispatch_bokeh.step(
         x="time",
         y="soc",
         source=_source,
         color="purple",
         line_width=2,
+        mode="after",
         y_range_name="soc_axis",
         legend_label="SoC",
     )
 
     p_dispatch_bokeh.legend.click_policy = "mute"
     p_dispatch_bokeh.add_layout(p_dispatch_bokeh.legend[0], "right")
-    p_dispatch_bokeh
+    _elapsed_bokeh = (time.perf_counter() - _t0) * 1000
+    mo.vstack(
+        [mo.md(f"_Python build: **{_elapsed_bokeh:.1f} ms**_"), p_dispatch_bokeh]
+    )
     return
 
 
