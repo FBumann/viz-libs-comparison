@@ -28,11 +28,9 @@ they're powered by [marimo](https://marimo.io) + [Pyodide](https://pyodide.org)
 | 02 | [Faceted scenarios](assets/notebooks/02_faceted.html) — same stacked-area dispatch across 5 scenarios | ✅ |
 | 03 | [Performance at scale](assets/notebooks/03_performance.html) — full-year hourly dispatch, each lib's data-volume escape hatch | ✅ |
 | 04 | [Load duration + heatmap](assets/notebooks/04_distribution.html) — demand sorted as an LDC and arranged as a 24 × 365 heatmap | ✅ |
-| 04 | Capacity & cost breakdown — multi-dim categorical bars | 🚧 |
-| 05 | Uncertainty visualization — mean dispatch with inter-scenario bands | 🚧 |
-| 06 | Energy balance / Sankey — where energy flows | 🚧 |
-| 07 | Interactive exploration — linked brushing across plots | 🚧 |
-| 08 | Large time series — full-year hourly stress test (WebGL / datashader) | 🚧 |
+| 05 | [Uncertainty bands](assets/notebooks/05_uncertainty.html) — min/max band + mean line + spaghetti of five scenarios | ✅ |
+| 06 | Interactive exploration — linked brushing across plots | 🚧 |
+| 07 | Dashboard composition — widgets + multiple plots reacting together | 🚧 |
 
 ## The data
 
