@@ -46,6 +46,7 @@ nav:
   - 04 — Load duration + heatmap: assets/notebooks/04_distribution.html
   - 05 — Uncertainty bands: assets/notebooks/05_uncertainty.html
   - 06 — Linked brushing: assets/notebooks/06_linked.html
+  - 07 — Dashboard: assets/notebooks/07_dashboard.html
 
 markdown_extensions:
   - admonition

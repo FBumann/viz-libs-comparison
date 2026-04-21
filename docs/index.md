@@ -30,7 +30,7 @@ they're powered by [marimo](https://marimo.io) + [Pyodide](https://pyodide.org)
 | 04 | [Load duration + heatmap](assets/notebooks/04_distribution.html) — demand sorted as an LDC and arranged as a 24 × 365 heatmap | ✅ |
 | 05 | [Uncertainty bands](assets/notebooks/05_uncertainty.html) — min/max band + mean line + spaghetti of five scenarios | ✅ |
 | 06 | [Linked brushing](assets/notebooks/06_linked.html) — brush a time range, see the demand distribution for that range | ✅ |
-| 07 | Dashboard composition — widgets + multiple plots reacting together | 🚧 |
+| 07 | [Dashboard](assets/notebooks/07_dashboard.html) — scenario dropdown driving a dispatch plot + a capacity bar chart | ✅ |
 
 ## The data
 
