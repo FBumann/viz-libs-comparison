@@ -27,7 +27,7 @@ they're powered by [marimo](https://marimo.io) + [Pyodide](https://pyodide.org)
 | 01 | [Dispatch over one week](assets/notebooks/01_dispatch.html) — stacked area of generation + demand + storage SoC | ✅ |
 | 02 | [Faceted scenarios](assets/notebooks/02_faceted.html) — same stacked-area dispatch across 5 scenarios | ✅ |
 | 03 | [Performance at scale](assets/notebooks/03_performance.html) — full-year hourly dispatch, each lib's data-volume escape hatch | ✅ |
-| 04 | Load duration + heatmap — full-year demand distribution views | 🚧 |
+| 04 | [Load duration + heatmap](assets/notebooks/04_distribution.html) — demand sorted as an LDC and arranged as a 24 × 365 heatmap | ✅ |
 | 04 | Capacity & cost breakdown — multi-dim categorical bars | 🚧 |
 | 05 | Uncertainty visualization — mean dispatch with inter-scenario bands | 🚧 |
 | 06 | Energy balance / Sankey — where energy flows | 🚧 |
