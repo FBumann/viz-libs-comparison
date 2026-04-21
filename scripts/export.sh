@@ -10,6 +10,10 @@ cd "$(dirname "$0")/.."
 
 NOTEBOOK_OUT="docs/assets/notebooks"
 
+# marimo automatically copies notebooks/public/ into the export output, so
+# files placed there (e.g. dispatch.parquet) end up alongside the notebook
+# HTML and are fetchable via the relative URL "public/<file>".
+
 # --- stage 1: marimo WASM exports -------------------------------------------
 rm -rf "$NOTEBOOK_OUT"
 mkdir -p "$NOTEBOOK_OUT"

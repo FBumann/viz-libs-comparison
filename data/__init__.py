@@ -1,3 +1,3 @@
-from data.loaders import load_gapminder, load_penguins
+from data.loaders import make_dispatch_dataframe
 
-__all__ = ["load_gapminder", "load_penguins"]
+__all__ = ["make_dispatch_dataframe"]

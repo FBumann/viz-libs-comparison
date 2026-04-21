@@ -1,44 +1,59 @@
 # viz-libs-comparison
 
-A reference comparing **Plotly**, **Altair**, and **Bokeh** for interactive
-Python visualization. Every chapter renders the same plot across all three
-libraries and shows the source code side-by-side, so you can see the API
-differences directly.
+A task-oriented comparison of **Plotly**, **Altair**, and **Bokeh** for
+**energy-system analysis** — specifically, for looking at the kind of
+multi-dimensional, time-series xarray output that tools like
+[flixopt](https://github.com/flixOpt/flixopt) produce.
 
-All notebooks are **fully interactive and run with no Python server** —
-they're powered by [marimo](https://marimo.io) +
-[Pyodide](https://pyodide.org) (WebAssembly) in your browser.
+Each chapter takes a concrete analysis question ("show me this week's
+dispatch", "compare three scenarios side by side") and walks through how each
+library answers it. The point isn't *which library wins* — it's what each
+library's mental model feels like on real work.
 
-## Why this exists
-
-Choosing between Plotly, Altair, and Bokeh for a project is surprisingly
-hard: their ecosystems overlap, their sweet spots differ, and most
-comparisons online are either shallow ("here's a bar chart in each") or
-strongly biased toward one lib. This site lets the code and the plots speak
-for themselves — no verdicts, no "winner per chapter." Readers form their
-own opinion from the same evidence.
+All notebooks are fully interactive and run with **no Python server** —
+they're powered by [marimo](https://marimo.io) + [Pyodide](https://pyodide.org)
+(WebAssembly) in your browser.
 
 ## Chapters
-
-Each chapter is a standalone marimo notebook with source and plots side by
-side.
 
 !!! tip
     **Cmd/Ctrl-click a chapter to open it in a new tab.** Pyodide stays booted
     in each tab, so switching between chapters is instant after the first
     boot. Plain clicks navigate in-place and re-boot on return.
 
-| # | Topic | Status |
-|---|-------|:------:|
-| 00 | [Smoke test](assets/notebooks/00_smoke_test.html) — sanity check that all three libs work in WASM | ✅ |
-| 01 | [Basics](assets/notebooks/01_basics.html) — scatter, line, bar, histogram | ✅ |
-| 02 | Statistical — box, violin, KDE, regression + CI | 🚧 |
-| 03 | Faceting — small multiples, grouped bars, heatmaps | 🚧 |
-| 04 | Multi-layer — overlays, dual axis, annotations | 🚧 |
-| 05 | Interactive — tooltips, zoom, selections, linked brushing | 🚧 |
-| 06 | Geospatial — choropleth, scatter-on-map | 🚧 |
-| 07 | Large data — 100k–1M points, WebGL / datashader | 🚧 |
-| 08 | Dashboards — composition, layouts, cross-filtering | 🚧 |
+| # | Task | Status |
+|---|------|:------:|
+| 00 | [Smoke test](assets/notebooks/00_smoke_test.html) — sanity check that all three libs render in WASM | ✅ |
+| 01 | [Dispatch over one week](assets/notebooks/01_dispatch.html) — stacked area of generation + demand + storage SoC | ✅ |
+| 02 | Load duration + heatmap — full-year demand distribution views | 🚧 |
+| 03 | Scenario comparison — same dispatch across 3 scenarios (facets / small multiples) | 🚧 |
+| 04 | Capacity & cost breakdown — multi-dim categorical bars | 🚧 |
+| 05 | Uncertainty visualization — mean dispatch with inter-scenario bands | 🚧 |
+| 06 | Energy balance / Sankey — where energy flows | 🚧 |
+| 07 | Interactive exploration — linked brushing across plots | 🚧 |
+| 08 | Large time series — full-year hourly stress test (WebGL / datashader) | 🚧 |
+
+## The data
+
+All chapters draw from a single synthetic `xr.Dataset` shaped like a
+`flixopt` `flow_system.solution`:
+
+```
+Dimensions:   (time: 8760, flow: 5, scenario: 5, period: 2)
+Coords:
+  * time      datetime64   2030-01-01 … 2030-12-31 23:00 (hourly)
+  * flow      object       'solar' 'wind' 'gas' 'batt_charge' 'batt_discharge'
+  * scenario  object       'baseline' 'high_renewables' 'costly_gas' …
+  * period    int          2030 2040
+Data vars:
+  generation  (scenario, period, flow, time)    MW
+  demand      (scenario, period, time)          MW
+  storage_soc (scenario, period, time)          MWh
+  capacity    (scenario, period, flow)          MW
+```
+
+Each chapter selects the subset it needs. The full 8760-hour series only
+gets stressed in the large-data chapter.
 
 ## Running locally
 

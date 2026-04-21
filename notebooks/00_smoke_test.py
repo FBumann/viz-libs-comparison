@@ -1,12 +1,12 @@
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
-#     "marimo",
-#     "pandas",
-#     "palmerpenguins",
-#     "plotly",
-#     "altair",
-#     "bokeh",
+#     "marimo==0.23.2",
+#     "pandas==2.3.3",
+#     "palmerpenguins==0.1.4",
+#     "plotly==6.7.0",
+#     "altair==6.1.0",
+#     "bokeh==3.9.0",
 # ]
 # ///
 import marimo

@@ -40,7 +40,7 @@ theme:
 nav:
   - Home: index.md
   - Smoke test: assets/notebooks/00_smoke_test.html
-  - 01 — Basics: assets/notebooks/01_basics.html
+  - 01 — Dispatch: assets/notebooks/01_dispatch.html
 
 markdown_extensions:
   - admonition

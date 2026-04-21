@@ -16,5 +16,7 @@ __marimo__/
 # build artifacts
 _site/
 docs/assets/notebooks/
+docs/assets/data/
 
 .claude
+.DS_Store
