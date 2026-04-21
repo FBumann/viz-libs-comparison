@@ -42,6 +42,7 @@ nav:
   - Smoke test: assets/notebooks/00_smoke_test.html
   - 01 — Dispatch: assets/notebooks/01_dispatch.html
   - 02 — Faceted scenarios: assets/notebooks/02_faceted.html
+  - 03 — Performance at scale: assets/notebooks/03_performance.html
 
 markdown_extensions:
   - admonition
