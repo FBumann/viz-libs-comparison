@@ -1,44 +1,32 @@
 # viz-libs-comparison
 
-A decision-grade comparison of **Plotly**, **Altair**, and **Bokeh** for interactive
-Python visualization.
+A reference comparing **Plotly**, **Altair**, and **Bokeh** for interactive
+Python visualization. Every chapter renders the same plot across all three
+libraries and shows the source code side-by-side, so you can see the API
+differences directly.
 
-Every chapter renders the same plot across all three libraries and scores each on
-code size, interactivity preserved after static-HTML export, file size,
-performance, ergonomics, and customization ceiling.
-
-All embedded plots on this site are **fully interactive and run with no Python server** —
-pages are powered by [marimo](https://marimo.io) + [Pyodide](https://pyodide.org)
-(WebAssembly) in your browser.
+All notebooks are **fully interactive and run with no Python server** —
+they're powered by [marimo](https://marimo.io) +
+[Pyodide](https://pyodide.org) (WebAssembly) in your browser.
 
 ## Why this exists
 
-Choosing between Plotly, Altair, and Bokeh for a project is surprisingly hard:
-their ecosystems overlap, their sweet spots differ, and most comparisons online
-are either shallow ("here's a bar chart in each") or strongly biased toward one
-lib. This site is the reference I wanted to have when that decision comes up.
-
-## How to use this
-
-Each chapter is built the same way:
-
-1. A short framing of the plot category.
-2. The same plot in each library, side-by-side with source code.
-3. An **evaluation table** scoring the three implementations on:
-    - Lines of code
-    - Interactivity retained in static HTML
-    - Exported file size
-    - Subjective render/interaction performance
-    - API ergonomics notes
-    - Customization ceiling
-4. A verdict — which library wins for this category, and why.
+Choosing between Plotly, Altair, and Bokeh for a project is surprisingly
+hard: their ecosystems overlap, their sweet spots differ, and most
+comparisons online are either shallow ("here's a bar chart in each") or
+strongly biased toward one lib. This site lets the code and the plots speak
+for themselves — no verdicts, no "winner per chapter." Readers form their
+own opinion from the same evidence.
 
 ## Chapters
+
+Each chapter links to a standalone marimo notebook with source and plots
+visible together.
 
 | # | Topic | Status |
 |---|-------|:------:|
 | 00 | [Smoke test](00_smoke_test.md) — sanity check that all three libs work in WASM | ✅ |
-| 01 | [Basics](01_basics.md) — scatter, line, bar, histogram | 🚧 |
+| 01 | [Basics](01_basics.md) — scatter, line, bar, histogram | ✅ |
 | 02 | [Statistical](02_statistical.md) — box, violin, KDE, regression + CI | 🚧 |
 | 03 | [Faceting](03_faceting.md) — small multiples, grouped bars, heatmaps | 🚧 |
 | 04 | [Multi-layer](04_multilayer.md) — overlays, dual axis, annotations | 🚧 |
@@ -55,4 +43,5 @@ uv sync --group dev
 uv run python -m http.server --directory _site 8765
 ```
 
-See the [README](https://github.com/FBumann/viz-libs-comparison#readme) for more.
+See the [README](https://github.com/FBumann/viz-libs-comparison#readme) for
+more.

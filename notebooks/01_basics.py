@@ -403,5 +403,53 @@ def _(figure, penguins):
     return
 
 
+# ---------------------------------------------------------------------------
+# Side-by-side — factual only
+# ---------------------------------------------------------------------------
+
+
+@app.cell
+def _(mo):
+    mo.md("## Side-by-side")
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        """
+        **Lines of plotting code**, counting the cell body as written above
+        (excluding `import` lines, excluding any data aggregation that's shared
+        across the three libs).
+
+        | Plot         | Plotly (px) | Altair | Bokeh |
+        |--------------|:-----------:|:------:|:-----:|
+        | Scatter      | 8           | 12     | 21    |
+        | Line         | 2           | 10     | 11    |
+        | Bar (grouped)| 5           | 10     | 24    |
+        | Histogram    | 8           | 10     | 23    |
+        """
+    )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        """
+        **Default interactivity** — what works out of the box with *only* the
+        code shown above, no additional configuration.
+
+        | Feature                | Plotly | Altair | Bokeh |
+        |------------------------|:------:|:------:|:-----:|
+        | Hover tooltips         | yes    | yes    | opt-in (add `hover` to `tools=`) |
+        | Pan + zoom             | yes    | opt-in (append `.interactive()`) | yes |
+        | Legend click to hide   | yes    | no     | opt-in (`legend.click_policy = "hide"`) |
+        | Double-click to reset  | yes    | yes    | no    |
+        """
+    )
+    return
+
+
 if __name__ == "__main__":
     app.run()
