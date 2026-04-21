@@ -17,6 +17,10 @@ app = marimo.App(width="medium")
 
 @app.cell
 def _():
+    import warnings
+
+    warnings.filterwarnings("ignore", message=".*narwhals.*")
+
     import marimo as mo
     return (mo,)
 
@@ -164,6 +168,7 @@ def _(week, week_ts):
     fig_dispatch_plotly.update_layout(
         yaxis={"title": "Power (MW)"},
         yaxis2={"title": "SoC (MWh)", "overlaying": "y", "side": "right"},
+        hovermode="x unified",
     )
     fig_dispatch_plotly
     return
@@ -179,26 +184,55 @@ def _(mo):
 def _(week_stacked, week_ts):
     import altair as alt
 
+    _domain = ["solar", "wind", "gas", "batt_discharge", "batt_charge", "demand", "SoC"]
+    _range = ["#F4B400", "#1A73E8", "#616161", "#34A853", "#EA4335", "#000000", "purple"]
+    _color = alt.Color(
+        "flow:N", scale=alt.Scale(domain=_domain, range=_range), legend=alt.Legend(title=None)
+    )
+
+    _all_flows = ["solar", "wind", "gas", "batt_discharge", "batt_charge"]
+    _legend_sel = alt.selection_point(
+        fields=["flow"],
+        bind="legend",
+        toggle="true",
+        value=[{"flow": f} for f in _all_flows],
+    )
+
     _area = (
         alt.Chart(week_stacked)
         .mark_area()
         .encode(
             x="time:T",
             y=alt.Y("power:Q").stack("zero").title("Power (MW)"),
-            color=alt.Color("flow:N").sort(
-                ["solar", "wind", "gas", "batt_discharge", "batt_charge"]
-            ),
+            color=_color,
+            tooltip=[
+                alt.Tooltip("time:T", format="%Y-%m-%d %H:%M"),
+                "flow:N",
+                alt.Tooltip("power:Q", format=".1f"),
+            ],
         )
+        .transform_filter(_legend_sel)
+        .add_params(_legend_sel)
     )
     _demand = (
-        alt.Chart(week_ts)
-        .mark_line(color="black", strokeDash=[4, 2])
-        .encode(x="time:T", y="demand:Q")
+        alt.Chart(week_ts.assign(flow="demand"))
+        .mark_line(strokeDash=[4, 2], strokeWidth=2)
+        .encode(
+            x="time:T",
+            y="demand:Q",
+            color=_color,
+            tooltip=[alt.Tooltip("time:T"), alt.Tooltip("demand:Q", format=".1f")],
+        )
     )
     _soc = (
-        alt.Chart(week_ts)
-        .mark_line(color="purple", strokeWidth=2)
-        .encode(x="time:T", y=alt.Y("storage_soc:Q").title("SoC (MWh)"))
+        alt.Chart(week_ts.assign(flow="SoC"))
+        .mark_line(strokeWidth=2)
+        .encode(
+            x="time:T",
+            y=alt.Y("storage_soc:Q").title("SoC (MWh)"),
+            color=_color,
+            tooltip=[alt.Tooltip("time:T"), alt.Tooltip("storage_soc:Q", format=".1f")],
+        )
     )
     chart_dispatch_altair = (
         alt.layer(_area + _demand, _soc)
@@ -218,7 +252,7 @@ def _(mo):
 
 @app.cell
 def _(week_stacked, week_ts):
-    from bokeh.models import ColumnDataSource, LinearAxis, Range1d
+    from bokeh.models import ColumnDataSource, HoverTool, LinearAxis, Range1d
     from bokeh.plotting import figure
 
     _wide = week_stacked.pivot_table(index="time", columns="flow", values="power").reset_index()
@@ -231,7 +265,23 @@ def _(week_stacked, week_ts):
         width=720,
         height=380,
         y_axis_label="Power (MW)",
-        tools="pan,wheel_zoom,box_zoom,reset,hover",
+        tools="pan,wheel_zoom,box_zoom,reset",
+    )
+    p_dispatch_bokeh.add_tools(
+        HoverTool(
+            mode="vline",
+            tooltips=[
+                ("time", "@time{%F %H:%M}"),
+                ("solar", "@solar{0.1} MW"),
+                ("wind", "@wind{0.1} MW"),
+                ("gas", "@gas{0.1} MW"),
+                ("batt_discharge", "@batt_discharge{0.1} MW"),
+                ("batt_charge", "@batt_charge{0.1} MW"),
+                ("demand", "@demand{0.1} MW"),
+                ("SoC", "@soc{0.1} MWh"),
+            ],
+            formatters={"@time": "datetime"},
+        )
     )
     _positive_flows = ["solar", "wind", "gas", "batt_discharge"]
     _positive_colors = ["#F4B400", "#1A73E8", "#616161", "#34A853"]
@@ -278,7 +328,7 @@ def _(week_stacked, week_ts):
         legend_label="SoC",
     )
 
-    p_dispatch_bokeh.legend.click_policy = "hide"
+    p_dispatch_bokeh.legend.click_policy = "mute"
     p_dispatch_bokeh
     return
 
