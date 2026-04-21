@@ -32,6 +32,8 @@ def _():
 def _(mo):
     mo.md(
         """
+        &larr; [Home](../../index.html)
+
         # 01 — Basics
 
         Scatter, line, bar, histogram — the plots every library must get right.

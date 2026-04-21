@@ -20,20 +20,25 @@ own opinion from the same evidence.
 
 ## Chapters
 
-Each chapter links to a standalone marimo notebook with source and plots
-visible together.
+Each chapter is a standalone marimo notebook with source and plots side by
+side.
+
+!!! tip
+    **Cmd/Ctrl-click a chapter to open it in a new tab.** Pyodide stays booted
+    in each tab, so switching between chapters is instant after the first
+    boot. Plain clicks navigate in-place and re-boot on return.
 
 | # | Topic | Status |
 |---|-------|:------:|
-| 00 | [Smoke test](00_smoke_test.md) — sanity check that all three libs work in WASM | ✅ |
-| 01 | [Basics](01_basics.md) — scatter, line, bar, histogram | ✅ |
-| 02 | [Statistical](02_statistical.md) — box, violin, KDE, regression + CI | 🚧 |
-| 03 | [Faceting](03_faceting.md) — small multiples, grouped bars, heatmaps | 🚧 |
-| 04 | [Multi-layer](04_multilayer.md) — overlays, dual axis, annotations | 🚧 |
-| 05 | [Interactive](05_interactive.md) — tooltips, zoom, selections, linked brushing | 🚧 |
-| 06 | [Geospatial](06_geospatial.md) — choropleth, scatter-on-map | 🚧 |
-| 07 | [Large data](07_large_data.md) — 100k–1M points, WebGL / datashader | 🚧 |
-| 08 | [Dashboards](08_dashboards.md) — composition, layouts, cross-filtering | 🚧 |
+| 00 | [Smoke test](assets/notebooks/00_smoke_test.html) — sanity check that all three libs work in WASM | ✅ |
+| 01 | [Basics](assets/notebooks/01_basics.html) — scatter, line, bar, histogram | ✅ |
+| 02 | Statistical — box, violin, KDE, regression + CI | 🚧 |
+| 03 | Faceting — small multiples, grouped bars, heatmaps | 🚧 |
+| 04 | Multi-layer — overlays, dual axis, annotations | 🚧 |
+| 05 | Interactive — tooltips, zoom, selections, linked brushing | 🚧 |
+| 06 | Geospatial — choropleth, scatter-on-map | 🚧 |
+| 07 | Large data — 100k–1M points, WebGL / datashader | 🚧 |
+| 08 | Dashboards — composition, layouts, cross-filtering | 🚧 |
 
 ## Running locally
 

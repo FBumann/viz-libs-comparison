@@ -25,6 +25,8 @@ def _():
 def _(mo):
     mo.md(
         """
+        &larr; [Home](../../index.html)
+
         # Smoke test
 
         Same scatter in Plotly, Altair, and Bokeh. If this page loads in a browser

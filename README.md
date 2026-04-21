@@ -72,32 +72,34 @@ uv run python -m http.server --directory _site 8765
    # ///
    ```
 
-2. Create `docs/NN_topic.md` with the prose discussion + an `<iframe>` embedding
-   the exported notebook:
+2. First markdown cell in the notebook should include a `← Home` back-link:
 
-   ```html
-   <iframe class="marimo-embed"
-           src="./assets/notebooks/NN_topic.html"
-           height="2000"></iframe>
+   ```python
+   mo.md("&larr; [Home](../../index.html)\n\n# NN — Topic\n\n...")
    ```
 
-3. Add a `nav` entry for the page in `mkdocs.yml`.
-4. Push — CI rebuilds the WASM export and the mkdocs site, then redeploys.
+3. Add a `nav` entry in `mkdocs.yml` pointing directly at the notebook HTML:
+
+   ```yaml
+   nav:
+     - NN — Topic: assets/notebooks/NN_topic.html
+   ```
+
+4. Update the chapter table in `docs/index.md` (flip 🚧 → ✅, add the link).
+5. Push — CI rebuilds the WASM export and the mkdocs site, then redeploys.
 
 ## Project layout
 
 ```
 .
 ├── data/                         # shared dataset loaders
-├── notebooks/                    # marimo .py notebooks — source of truth for plots
-├── docs/                         # mkdocs-material prose pages that embed notebooks
+├── notebooks/                    # marimo .py notebooks — source of truth
+├── docs/                         # mkdocs landing page
 │   ├── index.md
-│   ├── NN_topic.md
 │   └── assets/
-│       ├── embed.css
 │       └── notebooks/            # generated WASM HTML, gitignored
 ├── scripts/export.sh             # two-stage build: marimo export → mkdocs build
-├── mkdocs.yml
+├── mkdocs.yml                    # nav links straight at notebook HTMLs
 ├── tests/                        # loader sanity checks
 └── .github/workflows/            # CI (ruff) + Pages deploy
 ```

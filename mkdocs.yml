@@ -39,15 +39,8 @@ theme:
 
 nav:
   - Home: index.md
-  - Smoke test: 00_smoke_test.md
-  - 01 — Basics: 01_basics.md
-  - 02 — Statistical: 02_statistical.md
-  - 03 — Faceting: 03_faceting.md
-  - 04 — Multi-layer: 04_multilayer.md
-  - 05 — Interactive: 05_interactive.md
-  - 06 — Geospatial: 06_geospatial.md
-  - 07 — Large data: 07_large_data.md
-  - 08 — Dashboards: 08_dashboards.md
+  - Smoke test: assets/notebooks/00_smoke_test.html
+  - 01 — Basics: assets/notebooks/01_basics.html
 
 markdown_extensions:
   - admonition
