@@ -56,10 +56,11 @@ uv run python -m http.server --directory _site 8765
 # then open http://localhost:8765
 ```
 
-## Adding a new notebook
+## Adding a new chapter
 
-1. Create `notebooks/NN_topic.py` as a marimo notebook.
-2. Include the PEP 723 inline script header declaring any extra WASM deps:
+1. Create `notebooks/NN_topic.py` as a marimo notebook. Include the PEP 723
+   inline script header declaring every WASM dependency the notebook imports
+   (transitively — Pyodide only bundles packages you list):
 
    ```python
    # /// script
@@ -71,16 +72,32 @@ uv run python -m http.server --directory _site 8765
    # ///
    ```
 
-3. Link it from `notebooks/00_index.py`.
-4. Push — CI rebuilds and redeploys.
+2. Create `docs/NN_topic.md` with the prose discussion + an `<iframe>` embedding
+   the exported notebook:
+
+   ```html
+   <iframe class="marimo-embed"
+           src="./assets/notebooks/NN_topic.html"
+           height="2000"></iframe>
+   ```
+
+3. Add a `nav` entry for the page in `mkdocs.yml`.
+4. Push — CI rebuilds the WASM export and the mkdocs site, then redeploys.
 
 ## Project layout
 
 ```
 .
-├── data/                 # shared dataset loaders
-├── notebooks/            # marimo .py notebooks (source of truth)
-├── scripts/              # local build helpers
-├── tests/                # loader sanity checks
-└── .github/workflows/    # CI (ruff) + Pages deploy
+├── data/                         # shared dataset loaders
+├── notebooks/                    # marimo .py notebooks — source of truth for plots
+├── docs/                         # mkdocs-material prose pages that embed notebooks
+│   ├── index.md
+│   ├── NN_topic.md
+│   └── assets/
+│       ├── embed.css
+│       └── notebooks/            # generated WASM HTML, gitignored
+├── scripts/export.sh             # two-stage build: marimo export → mkdocs build
+├── mkdocs.yml
+├── tests/                        # loader sanity checks
+└── .github/workflows/            # CI (ruff) + Pages deploy
 ```

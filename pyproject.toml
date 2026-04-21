@@ -17,7 +17,11 @@ dependencies = [
 ]
 
 [dependency-groups]
+docs = [
+    "mkdocs-material>=9",
+]
 dev = [
+    {include-group = "docs"},
     "ruff>=0.11",
     "pre-commit>=4",
     "pytest>=8",

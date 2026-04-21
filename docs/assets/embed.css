@@ -1,0 +1,17 @@
+.marimo-embed {
+  width: 100%;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 8px;
+  background: var(--md-default-bg-color);
+  display: block;
+}
+
+.marimo-embed-wrapper {
+  margin: 1.5rem 0;
+}
+
+.marimo-embed-actions {
+  margin-top: 0.5rem;
+  text-align: right;
+  font-size: 0.85em;
+}

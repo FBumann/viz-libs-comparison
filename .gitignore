@@ -15,5 +15,6 @@ __marimo__/
 
 # build artifacts
 _site/
+docs/assets/notebooks/
 
 .claude

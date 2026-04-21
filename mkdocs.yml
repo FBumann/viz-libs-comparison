@@ -1,0 +1,73 @@
+site_name: viz-libs-comparison
+site_description: Decision-grade comparison of Plotly, Altair, and Bokeh
+site_url: https://fbumann.github.io/viz-libs-comparison/
+repo_url: https://github.com/FBumann/viz-libs-comparison
+repo_name: FBumann/viz-libs-comparison
+
+site_dir: _site
+docs_dir: docs
+use_directory_urls: false
+
+theme:
+  name: material
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.top
+    - navigation.indexes
+    - toc.follow
+    - content.code.copy
+    - search.suggest
+    - search.highlight
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  icon:
+    repo: fontawesome/brands/github
+
+nav:
+  - Home: index.md
+  - Smoke test: 00_smoke_test.md
+  - 01 — Basics: 01_basics.md
+  - 02 — Statistical: 02_statistical.md
+  - 03 — Faceting: 03_faceting.md
+  - 04 — Multi-layer: 04_multilayer.md
+  - 05 — Interactive: 05_interactive.md
+  - 06 — Geospatial: 06_geospatial.md
+  - 07 — Large data: 07_large_data.md
+  - 08 — Dashboards: 08_dashboards.md
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+extra_css:
+  - assets/embed.css
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/FBumann/viz-libs-comparison
