@@ -9,3 +9,11 @@ wheels/
 # Virtual environments
 .venv
 .idea/
+
+# marimo
+__marimo__/
+
+# build artifacts
+_site/
+
+.claude

@@ -1,7 +1,34 @@
 [project]
 name = "viz-libs-comparison"
 version = "0.0.1"
-description = "Add your description here"
+description = "Decision-grade comparison of Plotly, Altair, and Bokeh — interactive plots exported to static HTML via marimo."
 readme = "README.md"
-requires-python = ">=3.14"
-dependencies = []
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "marimo>=0.9",
+    "plotly>=5.24",
+    "altair>=5.4",
+    "bokeh>=3.6",
+    "vega-datasets>=0.9",
+    "palmerpenguins>=0.1.4",
+    "pandas>=2.2",
+    "pyarrow>=18",
+    "numpy>=2",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.11",
+    "pre-commit>=4",
+    "pytest>=8",
+]
+
+[tool.ruff]
+line-length = 100
+extend-exclude = ["notebooks/**/*.py"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
