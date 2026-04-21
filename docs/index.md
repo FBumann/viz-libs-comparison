@@ -29,7 +29,7 @@ they're powered by [marimo](https://marimo.io) + [Pyodide](https://pyodide.org)
 | 03 | [Performance at scale](assets/notebooks/03_performance.html) — full-year hourly dispatch, each lib's data-volume escape hatch | ✅ |
 | 04 | [Load duration + heatmap](assets/notebooks/04_distribution.html) — demand sorted as an LDC and arranged as a 24 × 365 heatmap | ✅ |
 | 05 | [Uncertainty bands](assets/notebooks/05_uncertainty.html) — min/max band + mean line + spaghetti of five scenarios | ✅ |
-| 06 | Interactive exploration — linked brushing across plots | 🚧 |
+| 06 | [Linked brushing](assets/notebooks/06_linked.html) — brush a time range, see the demand distribution for that range | ✅ |
 | 07 | Dashboard composition — widgets + multiple plots reacting together | 🚧 |
 
 ## The data

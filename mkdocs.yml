@@ -45,6 +45,7 @@ nav:
   - 03 — Performance at scale: assets/notebooks/03_performance.html
   - 04 — Load duration + heatmap: assets/notebooks/04_distribution.html
   - 05 — Uncertainty bands: assets/notebooks/05_uncertainty.html
+  - 06 — Linked brushing: assets/notebooks/06_linked.html
 
 markdown_extensions:
   - admonition
