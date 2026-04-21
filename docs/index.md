@@ -25,8 +25,8 @@ they're powered by [marimo](https://marimo.io) + [Pyodide](https://pyodide.org)
 |---|------|:------:|
 | 00 | [Smoke test](assets/notebooks/00_smoke_test.html) — sanity check that all three libs render in WASM | ✅ |
 | 01 | [Dispatch over one week](assets/notebooks/01_dispatch.html) — stacked area of generation + demand + storage SoC | ✅ |
-| 02 | Load duration + heatmap — full-year demand distribution views | 🚧 |
-| 03 | Scenario comparison — same dispatch across 3 scenarios (facets / small multiples) | 🚧 |
+| 02 | [Faceted scenarios](assets/notebooks/02_faceted.html) — same stacked-area dispatch across 5 scenarios, full year (8760 hours) | ✅ |
+| 03 | Load duration + heatmap — full-year demand distribution views | 🚧 |
 | 04 | Capacity & cost breakdown — multi-dim categorical bars | 🚧 |
 | 05 | Uncertainty visualization — mean dispatch with inter-scenario bands | 🚧 |
 | 06 | Energy balance / Sankey — where energy flows | 🚧 |
