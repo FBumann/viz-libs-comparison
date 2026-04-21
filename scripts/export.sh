@@ -18,7 +18,7 @@ for nb in notebooks/*.py; do
     name=$(basename "$nb" .py)
     out="$NOTEBOOK_OUT/${name}.html"
     echo "--> exporting $nb -> $out"
-    uv run marimo export html-wasm "$nb" -o "$out" --mode run -f
+    uv run marimo export html-wasm "$nb" -o "$out" --mode run --show-code -f
 done
 
 # marimo bundles a CLAUDE.md into each export that mkdocs would otherwise
